@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fecher</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> </head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">FECHER</div>
+            <nav>
+                <ul>
+                    <li><a href="#filmografia">Filmografia</a></li>
+                    <li><a href="#agenda">Agenda</a></li>
+                    <li><a href="#projetos">Projetos</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </nav>
+            <a href="#cursos" class="btn-cursos-header">Cursos</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="salve" class="container">
+            <div class="salve-content">
+                <h1>Salve Salve</h1>
+                <p>Márcio Fecher dos Santos, o "Fecher", nascido em Patos de Minas em 08 de junho de 1984, é um ator e comediante brasileiro. Filho de pais professores, começou sua jornada no teatro aos 12 anos.</p>
+                <p>Sua trajetória o levou ao Rio de Janeiro em 2001. Após passar por diversas peças, o sucesso veio com o convite para integrar a famosa Cia. de Comédia "Os Melhores do Mundo". Dentro do bom humor, dentro do limite que ele podia alcançar, ele fez história.</p>
+                <p>Seus shows de stand-up, que refletem sobre suas angústias e a sociedade, são um convite à reflexão e ao riso. Com um humor que questiona, ele agrada a todos que desejam se divertir.</p>
+                <p>Fecher é a prova de que a dedicação e o talento podem levar a lugares que ajudam e divertem, sem se levar tão a sério. E isso que é bom!</p>
+            </div>
+            <div class="salve-image">
+                <img src="https://via.placeholder.com/300x350" alt="Foto de Márvio Lúcio (Fecher)">
+            </div>
+        </section>
+
+        <section id="filmografia">
+            <div class="container">
+                <h2>Filmes e Séries</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="year">2016</span>
+                        <p>Fora do Limite</p>
+                        <p>Guerra Justa</p>
+                        <p>SuperChefe</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="year">2019</span>
+                        <p>O Inimigo</p>
+                        <p>Cine Holliúdy</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="year">2022</span>
+                        <p>O Palestrante</p>
+                        <p>Soltos</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="year">2023</span>
+                        <p>As Aventuras de José & Durval</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="year">2024</span>
+                        <p>Biônicos</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="agenda" class="container">
+            <h2>Agenda</h2>
+            <div class="agenda-content">
+                <div class="calendar">
+                    <h3>May 2023</h3>
+                    <img src="https://i.imgur.com/eG1tQe4.png" alt="Calendário de Maio de 2023">
+                </div>
+                <div class="event-card">
+                    <img src="https://via.placeholder.com/400x250" alt="O Menestrel Recita o Guardador de Rebanhos">
+                    <div class="event-details">
+                        <div class="horarios">
+                            <h4>Horários:</h4>
+                            <p>18:00 // 20:00</p>
+                        </div>
+                        <div class="local">
+                            <h4>Teatro Hermilo Borba Filho</h4>
+                        </div>
+                        <a href="#" class="btn-ingressos">Ingressos</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cursos" class="container">
+            <h2>Cursos</h2>
+            <div class="cursos-options">
+                <div class="curso-card presencial">
+                    <h3>Cursos Presenciais</h3>
+                </div>
+                <div class="curso-card online">
+                    <h3>Cursos Online</h3>
+                </div>
+            </div>
+        </section>
+
+        <section id="contato" class="container">
+            <div class="redes-contato">
+                <h3>Redes e Contato</h3>
+                <div class="social-icons">
+                    <a href="#"><img src="https://i.imgur.com/N8Z0V9I.png" alt="Instagram"></a>
+                    <a href="#"><img src="https://i.imgur.com/gK5UjF5.png" alt="IMDb"></a>
+                    <a href="#"><img src="https://i.imgur.com/2s9Vl7g.png" alt="TikTok"></a>
+                    <a href="#"><img src="https://i.imgur.com/6Xy1Dq4.png" alt="WhatsApp"></a>
+                </div>
+            </div>
+            <div class="form-contato">
+                <h3>Formulário de Contato</h3>
+                <form id="contactForm">
+                    <input type="text" name="nome" placeholder="Seu nome e sobrenome" required>
+                    <select name="assunto" required>
+                        <option value="" disabled selected>Gostaria de informações sobre...</option>
+                        <option value="shows">Shows</option>
+                        <option value="cursos">Cursos</option>
+                        <option value="imprensa">Imprensa</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                    <textarea name="mensagem" placeholder="Descreva melhor sua dúvida..." rows="4" required></textarea>
+                    <input type="email" name="email" placeholder="E-mail para entrarmos em contato com você" required>
+                    <button type="submit" class="btn-enviar">SEND</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">FECHER</div>
+            <p>© 2024 Márcio Fecher. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
