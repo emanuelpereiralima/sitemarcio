@@ -8,12 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> </head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 <body>
 
     <header>
         <div class="container">
-            <div class="logo">FECHER</div>
+            <div class="logo"><img src="fecher entretenimento logo.png" alt="logo fecher entretenimento"></div>
             <nav>
                 <ul>
                     <li><a href="#filmografia">Filmografia</a></li>
@@ -30,70 +30,59 @@
         <section id="salve" class="container">
             <div class="salve-content">
                 <h1>Salve Salve</h1>
-                <p>Márcio Fecher dos Santos, o "Fecher", nascido em Patos de Minas em 08 de junho de 1984, é um ator e comediante brasileiro. Filho de pais professores, começou sua jornada no teatro aos 12 anos.</p>
-                <p>Sua trajetória o levou ao Rio de Janeiro em 2001. Após passar por diversas peças, o sucesso veio com o convite para integrar a famosa Cia. de Comédia "Os Melhores do Mundo". Dentro do bom humor, dentro do limite que ele podia alcançar, ele fez história.</p>
-                <p>Seus shows de stand-up, que refletem sobre suas angústias e a sociedade, são um convite à reflexão e ao riso. Com um humor que questiona, ele agrada a todos que desejam se divertir.</p>
-                <p>Fecher é a prova de que a dedicação e o talento podem levar a lugares que ajudam e divertem, sem se levar tão a sério. E isso que é bom!</p>
+                <p>Márcio Antônio Fecher Junior, nascido de parto cesariano, às 8:30 da manhã do dia 06 de Junho de 1984 na cidade de Petrópolis na Região Serrano do Rio de Janeiro. Assim vim ao mundo!Já minha vida como ator, começou na escola.</p>
+                <p>Estou retratando o ano de 2001. Ainda posso sentir o cheiro, o meu corpo vibrando, a real sensação que tive quando vivenciei a minha primeira aula de teatro.Estar numa sala de aula no ensino secundarista, com uma querida Professora (Luciana Tavares), que delicadamente nos falava que ali podíamos tudo. Que dentro do bom senso, dentro do limite que ela podia conceder, seríamos acolhidos.</p>
+                <p>Servir de amor, de reflexões acerca de suas emoções, da sociedade em que estamos todes inserides e diretamente responsabilizades por aquilo que deixamos de legado.</p>
+                <p>E quero que minha história conte, a coleção de boas emoções. De obras que podem e devem ser revistas, pois se faz necessária. É isto que me move!</p>
             </div>
             <div class="salve-image">
-                <img src="https://via.placeholder.com/300x350" alt="Foto de Márvio Lúcio (Fecher)">
+                <img src="foto marcio.png" alt="Foto de Márcio Lúcio (Fecher)">
             </div>
         </section>
 
         <section id="filmografia">
-            <div class="container">
-                <h2>Filmes e Séries</h2>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <span class="year">2016</span>
-                        <p>Fora do Limite</p>
-                        <p>Guerra Justa</p>
-                        <p>SuperChefe</p>
+    <div class="container">
+        <h2>Filmes e Séries</h2>
+        <div class="timeline-container">
+            <button id="timeline-prev" class="timeline-nav-btn" title="Anos anteriores">&lt;</button>
+            
+            <div class="timeline-viewport">
+                <div class="timeline-track" id="timeline-track">
                     </div>
-                    <div class="timeline-item">
-                        <span class="year">2019</span>
-                        <p>O Inimigo</p>
-                        <p>Cine Holliúdy</p>
-                    </div>
-                    <div class="timeline-item">
-                        <span class="year">2022</span>
-                        <p>O Palestrante</p>
-                        <p>Soltos</p>
-                    </div>
-                    <div class="timeline-item">
-                        <span class="year">2023</span>
-                        <p>As Aventuras de José & Durval</p>
-                    </div>
-                    <div class="timeline-item">
-                        <span class="year">2024</span>
-                        <p>Biônicos</p>
-                    </div>
-                </div>
             </div>
-        </section>
+
+            <button id="timeline-next" class="timeline-nav-btn" title="Próximos anos">&gt;</button>
+        </div>
+    </div>
+</section>
+
 
         <section id="agenda" class="container">
-            <h2>Agenda</h2>
-            <div class="agenda-content">
-                <div class="calendar">
-                    <h3>May 2023</h3>
-                    <img src="https://i.imgur.com/eG1tQe4.png" alt="Calendário de Maio de 2023">
-                </div>
-                <div class="event-card">
-                    <img src="https://via.placeholder.com/400x250" alt="O Menestrel Recita o Guardador de Rebanhos">
-                    <div class="event-details">
-                        <div class="horarios">
-                            <h4>Horários:</h4>
-                            <p>18:00 // 20:00</p>
-                        </div>
-                        <div class="local">
-                            <h4>Teatro Hermilo Borba Filho</h4>
-                        </div>
-                        <a href="#" class="btn-ingressos">Ingressos</a>
-                    </div>
-                </div>
+    <h2>Agenda</h2>
+    <div class="agenda-container">
+        <div class="calendar-wrapper">
+            <div class="calendar-header">
+                <button id="prev-month-btn">&lt;</button>
+                <h3 id="month-year-display"></h3>
+                <button id="next-month-btn">&gt;</button>
             </div>
-        </section>
+            <div class="calendar-weekdays">
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-grid" id="calendar-body">
+                </div>
+        </div>
+        <div class="event-display" id="event-display-panel">
+            <p class="no-event-selected">Clique em uma data com evento para ver os detalhes.</p>
+        </div>
+    </div>
+</section>
 
         <section id="cursos" class="container">
             <h2>Cursos</h2>
@@ -107,14 +96,38 @@
             </div>
         </section>
 
-        <section id="contato" class="container">
+ <section id="contato" class="container">
             <div class="redes-contato">
                 <h3>Redes e Contato</h3>
-                <div class="social-icons">
-                    <a href="#"><img src="https://i.imgur.com/N8Z0V9I.png" alt="Instagram"></a>
-                    <a href="#"><img src="https://i.imgur.com/gK5UjF5.png" alt="IMDb"></a>
-                    <a href="#"><img src="https://i.imgur.com/2s9Vl7g.png" alt="TikTok"></a>
-                    <a href="#"><img src="https://i.imgur.com/6Xy1Dq4.png" alt="WhatsApp"></a>
+                <div class="social-card-container">
+                    <a href="https://www.instagram.com/marciofecherjr/" class="social-card instagram">
+                        <i class="fab fa-instagram"></i>
+                        <div class="social-info">
+                            <span class="social-metric" data-target="9.192">0</span>
+                            <span class="social-label">Seguidores</span>
+                        </div>
+                    </a>
+                    <a href="https://tiktok.com/marciofecherjr" class="social-card tiktok">
+                        <i class="fab fa-tiktok"></i>
+                        <div class="social-info">
+                            <span class="social-metric" data-target="100000">0</span>
+                            <span class="social-label">Visualizações</span>
+                        </div>
+                    </a>
+                    <a href="https://www.imdb.com/pt/name/nm8366160/" class="social-card imdb">
+                        <i class="fab fa-imdb"></i>
+                        <div class="social-info">
+                            <span class="social-metric" data-target="25">0</span>
+                            <span class="social-label">Filmografia</span>
+                        </div>
+                    </a>
+                    <a href="https://elencodigital.com.br/MarcioFecherJunior" class="social-card Elenco Digital">
+                        <i class="fa fa-film"></i>
+                        <div class="social-info">
+                            <span class="social-metric-text">Elenco Digital</span>
+                            <span class="social-label">Fale Comigo</span>
+                        </div>
+                    </a>
                 </div>
             </div>
             <div class="form-contato">
@@ -130,7 +143,7 @@
                     </select>
                     <textarea name="mensagem" placeholder="Descreva melhor sua dúvida..." rows="4" required></textarea>
                     <input type="email" name="email" placeholder="E-mail para entrarmos em contato com você" required>
-                    <button type="submit" class="btn-enviar">SEND</button>
+                    <button type="submit" class="btn-enviar">Enviar</button>
                 </form>
             </div>
         </section>
@@ -138,7 +151,7 @@
 
     <footer>
         <div class="container">
-            <div class="footer-logo">FECHER</div>
+            <div class="footer-logo"><img src="fecher entretenimento logo.png" alt="logo fecher entretenimento"></div>
             <p>© 2024 Márcio Fecher. All Rights Reserved.</p>
         </div>
     </footer>

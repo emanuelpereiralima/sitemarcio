@@ -1,7 +1,7 @@
 :root {
-    --primary-color: #00334E;
-    --secondary-color: #0ABFBC;
-    --accent-color: #F27405;
+    --primary-color: #00c2cb;
+    --secondary-color: #014147;
+    --accent-color: #f39724;
     --light-color: #F0F0F0;
     --dark-color: #0D0D0D;
     --text-color: #FFFFFF;
@@ -51,8 +51,6 @@ h2::after {
 /* --- Header --- */
 header {
     background-color: var(--primary-color);
-    padding: 20px 0;
-    border-bottom: 1px solid var(--secondary-color);
 }
 
 header .container {
@@ -93,6 +91,7 @@ header nav ul li a:hover {
     text-decoration: none;
     font-weight: bold;
     transition: all 0.3s ease;
+    
 }
 
 .btn-cursos-header:hover {
@@ -105,8 +104,8 @@ header nav ul li a:hover {
 #salve {
     display: flex;
     align-items: center;
-    gap: 50px;
-    padding: 60px 20px;
+    gap: 200px;
+    padding: 10px 20px;
 }
 
 .salve-content {
@@ -126,140 +125,355 @@ header nav ul li a:hover {
 
 .salve-image {
     flex-basis: 300px;
-}
-
-.salve-image img {
-    width: 100%;
-    border-radius: 10px;
-    border: 5px solid var(--secondary-color);
-}
-
-
-/* --- Seção Filmografia (Timeline) --- */
-#filmografia {
-    padding: 60px 0;
-    background-color: #002A40; /* Um tom ligeiramente diferente */
-}
-
-.timeline {
     position: relative;
-    width: 100%;
+    width: 250px;
+    aspect-ratio: 1 / 1;
     display: flex;
-    justify-content: space-between;
-    padding: 40px 0;
+    justify-content: center;
+    align-items: center;
 }
 
-.timeline::before {
-    content: '';
+/* Quadrado de trás transparente com borda preta */
+.salve-image::before {
+    content: "";
     position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    width: 100%;
-    height: 4px;
-    background-color: var(--accent-color);
-}
-
-.timeline-item {
-    position: relative;
-    text-align: center;
-}
-
-.timeline-item::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 20px;
-    height: 20px;
-    background-color: var(--primary-color);
-    border: 4px solid var(--accent-color);
-    border-radius: 50%;
+    width: 350px;
+    height: 350px;
+    border: 2px solid black;
+    border-radius: 12px;
+    background: transparent;
+    transform: rotate(-10deg);
     z-index: 1;
 }
 
-.timeline-item .year {
+/* Quadrado laranja com padrão ondulado */
+.salve-image::after {
+    content: "";
     position: absolute;
-    top: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.5rem;
+    width: 350px;
+    height: 350px;
+    border-radius: 12px;
+    background-color: #f7931e;
+    border: 2px solid black;
+    transform: rotate(15deg);
+    z-index: 2;
+    background-image:
+        repeating-radial-gradient(
+            circle at center,
+            transparent 0,
+            transparent 10px,
+            rgba(0, 0, 0, 0.1) 10px,
+            rgba(0, 0, 0, 0.1) 12px
+        );
+    background-size: 200% 100%;
+    background-repeat: repeat;
+    opacity: 1;
+}
+
+/* Oculta a imagem real se não quiser mostrar */
+.salve-image img {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: auto;
+    clip-path: polygon(
+       0% 0%,    /* topo esquerdo */
+      100% 0%,  /* topo direito */
+      100% 100%, /* canto inferior direito cortado */
+      0% 81%   /* canto inferior esquerdo mais baixo */
+    );}
+
+#filmografia {
+    padding: 60px 0;
+}
+
+.timeline-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+    position: relative;
+}
+
+.timeline-viewport {
+    width: 100%;
+    max-width: 1200px;
+    overflow: hidden;
+    cursor: grab;
+}
+
+.timeline-viewport:active {
+    cursor: grabbing;
+}
+
+.timeline-track {
+    display: flex;
+    position: relative;
+    align-items: center;
+    min-height: 220px;
+    box-sizing: border-box;
+}
+
+/* A linha amarela que conecta tudo */
+.timeline-track::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    width: 300%;
+    height: 3px;
+    background-color: var(--accent-color);
+    z-index: 0;
+}
+
+.timeline-year-item {
+    flex: 0 0 .66%;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0 10px;
+    user-select: none;
+    gap: 12px;
+}
+
+.timeline-year-item .year-label {
+    font-size: 2.2rem;
     font-weight: bold;
-    color: var(--accent-color);
+    color: var(--text-color);
 }
 
-.timeline-item p {
-    margin-top: 30px;
+.timeline-year-item .year-circle {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border: 4px solid var(--accent-color);
+    border-radius: 50%;
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+.timeline-year-item .works-list {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.timeline-year-item .works-list li {
+    margin-bottom: 5px;
     font-size: 0.9rem;
+    color: #ffffff;
+    transition: all 0.2s ease-in-out;
+}
+
+.timeline-year-item .works-list li:hover {
+    color: var(--secondary-color);
+    transform: scale(1.1);
+    cursor: default;
+}
+
+.timeline-nav-btn {
+    background-color: rgba(10, 191, 188, 0.2);
+    border: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.timeline-nav-btn:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+.timeline-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 
-/* --- Seção Agenda --- */
+/* =================================== */
+/* === NOVOS ESTILOS PARA A AGENDA === */
+/* =================================== */
+
 #agenda {
     padding: 60px 20px;
 }
 
-.agenda-content {
+.agenda-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-start;
     gap: 40px;
     margin-top: 40px;
 }
 
-.calendar img {
-    max-width: 300px;
-    border-radius: 10px;
-}
-
-.event-card {
+.calendar-wrapper {
+    max-width: 600px;
+    width: 100%;
     background-color: #002A40;
-    border-radius: 10px;
-    overflow: hidden;
-    max-width: 500px;
-    display: flex;
-    border: 2px solid var(--secondary-color);
-}
-
-.event-card img {
-    width: 50%;
-    object-fit: cover;
-}
-
-.event-details {
     padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--secondary-color);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header h3 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.5rem;
+}
+
+.calendar-header button {
+    background: none;
+    border: 2px solid var(--secondary-color);
+    color: var(--secondary-color);
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.calendar-header button:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+.calendar-weekdays, .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-weekdays div {
+    text-align: center;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.calendar-day {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.calendar-day.empty-day {
+    opacity: 0.3;
+}
+
+.calendar-day.event-day {
+    background-color: rgba(242, 116, 5, 0.3); /* Laranja com opacidade */
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid var(--accent-color);
+}
+
+.calendar-day.event-day:hover {
+    background-color: rgba(242, 116, 5, 0.6);
+}
+
+.calendar-day.active-day {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+}
+
+/* Painel de Exibição do Evento */
+.event-display {
+    background-color: #002A40;
+    flex-basis: 400px; /* Largura base */
+    flex-grow: 1;
+    max-width: 450px;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--secondary-color);
+    min-height: 400px; /* Altura mínima para evitar colapso */
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    width: 50%;
+    align-items: center;
+    justify-content: center;
 }
 
-.event-details h4 {
+.event-display .no-event-selected {
+    color: #ccc;
+    text-align: center;
+}
+
+.event-card-dynamic {
+    width: 100%;
+    text-align: left;
+    display: none; /* Inicia oculto */
+}
+
+.event-card-dynamic.visible {
+    display: block; /* Torna-se visível quando ativado pelo JS */
+}
+
+.event-card-dynamic img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.event-card-dynamic h4 {
     color: var(--secondary-color);
-    font-size: 1.1rem;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
 }
 
-.event-details p {
+.event-card-dynamic p {
     font-size: 1rem;
-    font-weight: bold;
+    margin-bottom: 20px;
 }
 
-.btn-ingressos {
+.event-card-dynamic .btn-ingressos {
     background-color: var(--accent-color);
     color: var(--text-color);
     text-align: center;
+    display: block;
     padding: 15px;
     border-radius: 5px;
     text-decoration: none;
     font-weight: bold;
     transition: background-color 0.3s ease;
-    margin-top: 10px;
 }
 
-.btn-ingressos:hover {
+.event-card-dynamic .btn-ingressos:hover {
     background-color: #d96404;
 }
+
+/* Ajuste para telas menores */
+@media (max-width: 992px) {
+    .agenda-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 
 /* --- Seção Cursos --- */
 #cursos {
@@ -308,60 +522,90 @@ header nav ul li a:hover {
      background-image: url('https://via.placeholder.com/400x200/bbbbbb/000000?text=Curso+Online');
 }
 
-/* --- Seção Contato --- */
+/* === ESTILOS PARA OS CARDS SOCIAIS === */
 #contato {
     padding: 60px 20px;
     display: flex;
     gap: 50px;
+    flex-wrap: wrap;
+}
+.redes-contato, .form-contato { 
+    flex: 1; 
+    min-width: 320px;
+}
+.redes-contato h3, .form-contato h3 { 
+    font-size: 1.5rem; 
+    color: var(--secondary-color); 
 }
 
-.redes-contato, .form-contato {
-    flex: 1;
-}
-
-.redes-contato h3, .form-contato h3 {
-    font-size: 1.5rem;
-    color: var(--text-color);
-}
-
-.social-icons {
-    display: flex;
-    gap: 15px;
+.social-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
     margin-top: 20px;
 }
 
-.social-icons a img {
-    width: 60px;
-    height: 60px;
-    transition: opacity 0.3s ease;
+.social-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--secondary-color);
+    text-decoration: none;
+    color: var(--text-color);
+    transition: all 0.3s ease;
 }
 
-.social-icons a:hover img {
+.social-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.social-card i {
+    font-size: 40px;
+    margin-right: 15px;
+    width: 50px;
+}
+
+.social-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.social-metric, .social-metric-text { /* Estilo aplicado a ambos os tipos de métrica */
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.social-label {
+    font-size: 0.9rem;
     opacity: 0.8;
 }
 
-#contactForm {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 20px;
-}
+/* Cores específicas para cada card (opcional) */
+.social-card.instagram:hover { background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); }
+.social-card.tiktok:hover { background: #000; }
+.social-card.imdb:hover { background: #d3a93b; }
+.social-card.whatsapp:hover { background: #25D366; }
 
+
+/* Formulário de Contato (mantido) */
+#contactForm { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    margin-top: 20px; 
+}
 #contactForm input, #contactForm select, #contactForm textarea {
     width: 100%;
     padding: 15px;
     border-radius: 5px;
     border: 1px solid var(--secondary-color);
-    background-color: #002A40;
-    color: var(--text-color);
+    background-color: #014147;
+    color: #ffffff;
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
 }
-
-#contactForm input::placeholder, #contactForm textarea::placeholder {
-    color: #ccc;
-}
-
 .btn-enviar {
     background-color: var(--accent-color);
     color: var(--text-color);
@@ -373,15 +617,14 @@ header nav ul li a:hover {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
-.btn-enviar:hover {
-     background-color: #d96404;
+.btn-enviar:hover { 
+    background-color: #e6891e; 
 }
 
 /* --- Footer --- */
 footer {
     background-color: #0D0D0D;
-    padding: 30px 0;
+    padding: 10px 0;
     border-top: 1px solid #333;
 }
 
@@ -392,7 +635,7 @@ footer .container {
 }
 
 .footer-logo {
-    font-size: 1.5rem;
+    font-size: 0.5rem;
     font-weight: bold;
     color: var(--secondary-color);
 }
