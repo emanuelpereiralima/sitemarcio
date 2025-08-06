@@ -234,6 +234,51 @@ document.addEventListener('DOMContentLoaded', function() {
         renderCalendar();
     }
 
+    const textosContainer = document.querySelector('#textos .textos-container');
+    if (textosContainer && db) {
+        // 1. Mostra uma mensagem de "Carregando..."
+        textosContainer.innerHTML = "<p>Carregando textos...</p>";
+
+        // 2. Busca os documentos da coleção "textos" no Firestore
+        db.collection("textos").orderBy("createdAt", "desc").get()
+            .then((querySnapshot) => {
+                // 3. Limpa a mensagem de "Carregando..."
+                textosContainer.innerHTML = '';
+
+                // Verifica se não há nenhum texto publicado
+                if (querySnapshot.empty) {
+                    textosContainer.innerHTML = "<p>Nenhum texto publicado ainda. Adicione o primeiro no painel de administração!</p>";
+                    return;
+                }
+
+                // 4. Cria o HTML para cada texto encontrado
+                querySnapshot.forEach((doc) => {
+                    const post = doc.data();
+                    // Converte a data do Firebase para um formato legível
+                    const postDate = post.createdAt ? post.createdAt.toDate().toLocaleDateString('pt-BR') : 'Data indisponível';
+                    
+                    const postElement = document.createElement('article');
+                    postElement.className = 'post-card';
+                    
+                    // Cria o conteúdo do card com os dados do banco
+                    postElement.innerHTML = `
+                        <div class="post-content">
+                            <h3>${post.titulo}</h3>
+                            <p class="post-meta">Publicado em ${postDate}</p>
+                            <p class="post-excerpt">${post.conteudo.substring(0, 150)}...</p>
+                            <a href="#" class="post-readmore">Leia Mais</a>
+                        </div>
+                    `;
+                    // 5. Adiciona o card criado à página
+                    textosContainer.appendChild(postElement);
+                });
+            })
+            .catch((error) => {
+                // Em caso de erro (ex: problemas com as regras do Firestore)
+                console.error("Erro ao carregar textos: ", error);
+                textosContainer.innerHTML = "<p>Ocorreu um erro ao carregar os textos. Tente novamente mais tarde.</p>";
+            });
+    }
 
     // ===================================================
     // === CÓDIGO DO PAINEL DE ADMIN
@@ -263,16 +308,136 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Confirmação antes de apagar um texto no painel de admin
-    const deleteButtons = document.querySelectorAll('.btn-delete');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const wantsToDelete = confirm('Tem certeza de que deseja apagar este item? Esta ação não pode ser desfeita.');
-            if (wantsToDelete) {
-                this.closest('.text-item').remove();
+     let currentlyEditingId = null;
+
+    // Referências aos elementos do formulário de textos
+    const publishTextoBtn = document.getElementById('publish-texto-btn');
+    const tituloInput = document.getElementById('texto-titulo-input');
+    const conteudoTextarea = document.getElementById('texto-conteudo-textarea');
+    const publishedTextsList = document.querySelector('.published-texts-list');
+
+    // Função para resetar o formulário para o modo "Adicionar"
+    function resetTextForm() {
+        currentlyEditingId = null;
+        tituloInput.value = '';
+        conteudoTextarea.value = '';
+        publishTextoBtn.textContent = 'Publicar Texto';
+        document.querySelector('.admin-card h4').textContent = 'Adicionar Novo Texto';
+    }
+
+    // --- LÓGICA PARA ADICIONAR E EDITAR TEXTOS ---
+    if (publishTextoBtn && db) {
+        publishTextoBtn.addEventListener('click', () => {
+            const titulo = tituloInput.value;
+            const conteudo = conteudoTextarea.value;
+
+            if (!titulo || !conteudo) {
+                alert("Por favor, preencha o título e o conteúdo.");
+                return;
+            }
+
+            publishTextoBtn.disabled = true;
+
+            // Se 'currentlyEditingId' tiver um valor, estamos EDITANDO
+            if (currentlyEditingId) {
+                publishTextoBtn.textContent = "Salvando...";
+                db.collection("textos").doc(currentlyEditingId).update({
+                    titulo: titulo,
+                    conteudo: conteudo
+                })
+                .then(() => {
+                    alert('Texto atualizado com sucesso!');
+                    resetTextForm();
+                    loadPublishedTexts(); // Recarrega a lista
+                })
+                .catch(error => console.error("Erro ao atualizar: ", error))
+                .finally(() => publishTextoBtn.disabled = false);
+
+            } else { // Senão, estamos ADICIONANDO um novo
+                publishTextoBtn.textContent = "Publicando...";
+                db.collection("textos").add({
+                    titulo: titulo,
+                    conteudo: conteudo,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                })
+                .then(() => {
+                    alert('Texto publicado com sucesso!');
+                    resetTextForm();
+                    loadPublishedTexts(); // Recarrega a lista
+                })
+                .catch(error => console.error("Erro ao adicionar: ", error))
+                .finally(() => publishTextoBtn.disabled = false);
             }
         });
-    });
+    }
+
+    // --- FUNÇÃO PARA CARREGAR OS TEXTOS PUBLICADOS NA LISTA DO ADMIN ---
+    function loadPublishedTexts() {
+        if (!publishedTextsList || !db) return;
+
+        db.collection("textos").orderBy("createdAt", "desc").get().then(snapshot => {
+            publishedTextsList.innerHTML = '';
+            snapshot.forEach(doc => {
+                const post = doc.data();
+                const textItem = document.createElement('div');
+                textItem.className = 'text-item';
+                textItem.dataset.id = doc.id; // Salva o ID do documento
+                textItem.innerHTML = `
+                    <span>${post.titulo}</span>
+                    <div class="text-item-actions">
+                        <button class="btn-edit"><i class="fas fa-edit"></i> Editar</button>
+                        <button class="btn-delete"><i class="fas fa-trash"></i> Apagar</button>
+                    </div>
+                `;
+                publishedTextsList.appendChild(textItem);
+            });
+        });
+    }
+
+    // --- LÓGICA PARA OS BOTÕES DE EDITAR E APAGAR NA LISTA ---
+    if (publishedTextsList && db) {
+        loadPublishedTexts(); // Carrega os textos ao abrir a página
+
+        publishedTextsList.addEventListener('click', (e) => {
+            const targetButton = e.target.closest('button');
+            if (!targetButton) return;
+
+            const textItem = targetButton.closest('.text-item');
+            const docId = textItem.dataset.id;
+
+            // Lógica para o botão EDITAR
+            if (targetButton.classList.contains('btn-edit')) {
+                db.collection('textos').doc(docId).get().then(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        tituloInput.value = data.titulo;
+                        conteudoTextarea.value = data.conteudo;
+                        currentlyEditingId = doc.id; // Define que estamos editando este ID
+                        
+                        publishTextoBtn.textContent = 'Salvar Alterações'; // Muda o texto do botão
+                        document.querySelector('.admin-card h4').textContent = 'Editando Texto'; // Muda o título do card
+                        
+                        // Foca o formulário para facilitar a edição
+                        tituloInput.focus();
+                    }
+                });
+            }
+
+            // Lógica para o botão APAGAR
+            if (targetButton.classList.contains('btn-delete')) {
+                if (confirm('Tem certeza que deseja apagar este texto? A ação é permanente.')) {
+                    db.collection('textos').doc(docId).delete()
+                    .then(() => {
+                        alert('Texto apagado com sucesso!');
+                        textItem.remove(); // Remove o item da tela
+                    })
+                    .catch(error => console.error('Erro ao apagar texto: ', error));
+                }
+            }
+        });
+    }
+
+});
 
     // Validação do formulário de mudança de senha
     const changePasswordForm = document.getElementById('change-password-form');
@@ -292,5 +457,3 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
-});
