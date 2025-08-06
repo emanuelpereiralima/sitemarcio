@@ -802,6 +802,11 @@ footer p {
     background-color: rgba(0,0,0,0.2);
 }
 
+.sidebar-header h3 {
+    font-weight: bold;
+    color: white;
+}
+
 .sidebar-nav ul {
     list-style: none;
     padding: 0;
@@ -850,7 +855,7 @@ footer p {
 }
 
 .admin-main-header p {
-    color: #777;
+    color: #ffffff;
     font-size: 1.1rem;
 }
 

@@ -1,44 +1,90 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Tenta inicializar o Firestore DB. A variável 'firebase' vem do script no HTML.
-    const db = (typeof firebase !== 'undefined') ? firebase.firestore() : null;
-
     // ===================================================
-    // === CÓDIGOS GERAIS DO SITE (Aplicado a todas as páginas)
+    // === CÓDIGOS GERAIS DO SITE (Links, Logo, Formulário)
     // ===================================================
 
-    // Smooth scrolling para links de âncora (ex: #contato)
+    // Smooth scrolling para os links de navegação
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
-            // Só executa o scroll se for um ID válido na página atual
-            if (targetId.length > 1 && document.querySelector(targetId)) {
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
                 e.preventDefault();
-                document.querySelector(targetId).scrollIntoView({
+                targetElement.scrollIntoView({
                     behavior: 'smooth'
                 });
             }
         });
     });
 
-    // Faz o logo na página principal levar para a tela de login
-    const logoLink = document.querySelector('header .logo');
+    // ===================================================
+    // === LÓGICA DA PÁGINA DE LOGIN (login.html) ===
+    // ===================================================
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+
+            if (usernameInput.value === "admin" && passwordInput.value === "senha123") {
+                alert('Login bem-sucedido! Redirecionando...');
+
+                // NOVO: Salva o "ticket" de acesso no navegador
+                // sessionStorage só dura enquanto a aba do navegador estiver aberta
+                sessionStorage.setItem('loggedIn', 'true');
+
+                window.location.href = 'admin.html';
+            } else {
+                alert('Usuário ou senha inválidos.');
+            }
+        });
+    }
+
+
+    // ===================================================
+    // === LÓGICA DO PAINEL DE ADMIN (admin.html)
+    // ===================================================
+
+    // NOVO: Lógica para o botão de Sair (Logout)
+    const logoutButton = document.getElementById('logout-btn');
+    if(logoutButton) {
+        logoutButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Impede a navegação padrão do link
+
+            // Remove o "ticket" de acesso
+            sessionStorage.removeItem('loggedIn');
+
+            alert('Você saiu do painel.');
+            // Redireciona para a página inicial
+            window.location.href = 'index.html';
+        });
+    }
+
+    // Link do logo para a página de login
+    const logoLink = document.querySelector('.logo');
     if (logoLink) {
-        logoLink.addEventListener('click', () => {
-            window.location.href = 'login.html';
+        logoLink.addEventListener('click', (e) => {
+            // Verifica se o clique não foi em um link dentro do logo
+            if (e.target.tagName !== 'A') {
+                window.location.href = 'login.html';
+            }
         });
         logoLink.style.cursor = 'pointer';
     }
 
-    // Formulário de Contato
+    // Manipulação do formulário de contato
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const nome = this.nome.value;
             const assunto = this.assunto.value;
+
             if (nome && assunto) {
-                alert(`Obrigado, ${nome}! Recebemos sua mensagem sobre "${assunto}".`);
+                alert(`Obrigado, ${nome}! Recebemos sua mensagem sobre "${assunto}". Entraremos em contato em breve.`);
                 this.reset();
             } else {
                 alert('Por favor, preencha todos os campos obrigatórios.');
@@ -46,11 +92,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ===================================================
-    // === LÓGICA DA PÁGINA INICIAL (index.html)
-    // ===================================================
 
-    // Popula a timeline de filmes com dados estáticos
+    // ===========================================
+    // === CÓDIGO DA FILMOGRAFIA (TIMELINE)
+    // ===========================================
     const timelineTrack = document.getElementById('timeline-track');
     if (timelineTrack) {
         const filmografiaData = [
@@ -60,130 +105,174 @@ document.addEventListener('DOMContentLoaded', function() {
             { year: 2023, works: ["As Aventuras de José e Durval"] },
             { year: 2024, works: ["Biônicos"] }
         ];
+
         filmografiaData.forEach(item => {
             const yearItem = document.createElement('div');
             yearItem.className = 'timeline-year-item';
-            yearItem.innerHTML = `<div class="year-label">${item.year}</div><div class="year-marker"></div><ul class="works-list">${item.works.map(work => `<li>${work}</li>`).join('')}</ul>`;
+            yearItem.innerHTML = `
+                <div class="year-label">${item.year}</div>
+                <div class="year-marker"></div>
+                <ul class="works-list">
+                    ${item.works.map(work => `<li>${work}</li>`).join('')}
+                </ul>
+            `;
             timelineTrack.appendChild(yearItem);
         });
     }
 
-    // Carrega os textos do Firestore e exibe na seção #textos
-    const textosContainer = document.querySelector('#textos .textos-container');
-    if (textosContainer && db) {
-        db.collection("textos").orderBy("createdAt", "desc").get().then((querySnapshot) => {
-            if (querySnapshot.empty) {
-                textosContainer.innerHTML = "<p>Nenhum texto publicado ainda.</p>";
-                return;
+
+    // ===========================================
+    // === CÓDIGO DA AGENDA (CALENDÁRIO)
+    // ===========================================
+    const calendarBody = document.getElementById('calendar-body');
+    if (calendarBody) {
+        const events = [{
+            date: '2025-08-15',
+            title: 'Especial de Stand-Up',
+            imageSrc: 'https://via.placeholder.com/400x250/00334E/FFFFFF?text=Especial',
+            time: '21:00',
+            location: 'Clube da Comédia',
+            ticketLink: '#'
+        }];
+
+        const monthYearDisplay = document.getElementById('month-year-display');
+        const prevMonthBtn = document.getElementById('prev-month-btn');
+        const nextMonthBtn = document.getElementById('next-month-btn');
+        const eventDisplayPanel = document.getElementById('event-display-panel');
+        let currentDate = new Date();
+
+        function renderCalendar() {
+            calendarBody.innerHTML = '';
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            if(monthYearDisplay) {
+                monthYearDisplay.textContent = `${currentDate.toLocaleString('pt-BR', { month: 'long' })} de ${year}`;
             }
-            textosContainer.innerHTML = ''; // Limpa os posts de exemplo
-            querySnapshot.forEach((doc) => {
-                const post = doc.data();
-                const postDate = post.createdAt ? post.createdAt.toDate().toLocaleDateString('pt-BR') : 'Data indisponível';
-                const postElement = document.createElement('article');
-                postElement.className = 'post-card';
-                postElement.innerHTML = `
-                    <div class="post-content">
-                        <h3>${post.titulo}</h3>
-                        <p class="post-meta">Publicado em ${postDate}</p>
-                        <p class="post-excerpt">${post.conteudo.substring(0, 150)}...</p>
-                        <a href="#" class="post-readmore">Leia Mais</a>
-                    </div>
-                `;
-                textosContainer.appendChild(postElement);
-            });
-        }).catch(error => console.error("Erro ao carregar textos: ", error));
-    }
 
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const lastDateOfMonth = new Date(year, month + 1, 0).getDate();
+            const lastDateOfLastMonth = new Date(year, month, 0).getDate();
 
-    // ===================================================
-    // === LÓGICA DO PAINEL DE ADMIN (admin.html)
-    // ===================================================
-
-    // Adicionar novo texto ao Firestore
-    const publishTextoBtn = document.getElementById('publish-texto-btn');
-    if (publishTextoBtn && db) {
-        publishTextoBtn.addEventListener('click', () => {
-            const tituloInput = document.getElementById('texto-titulo-input');
-            const conteudoTextarea = document.getElementById('texto-conteudo-textarea');
-            
-            if (tituloInput.value && conteudoTextarea.value) {
-                publishTextoBtn.textContent = "Publicando...";
-                publishTextoBtn.disabled = true;
-
-                db.collection("textos").add({
-                    titulo: tituloInput.value,
-                    conteudo: conteudoTextarea.value,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                })
-                .then(() => {
-                    alert('Texto publicado com sucesso!');
-                    tituloInput.value = '';
-                    conteudoTextarea.value = '';
-                    loadPublishedTexts(); // Recarrega a lista de textos
-                })
-                .catch((error) => {
-                    console.error("Erro ao adicionar texto: ", error);
-                    alert('Erro ao publicar texto.');
-                })
-                .finally(() => {
-                    publishTextoBtn.textContent = "Publicar Texto";
-                    publishTextoBtn.disabled = false;
-                });
-            } else {
-                alert("Por favor, preencha o título e o conteúdo.");
+            for (let i = firstDayOfMonth; i > 0; i--) {
+                const dayCell = document.createElement('div');
+                dayCell.classList.add('calendar-day', 'empty-day');
+                dayCell.textContent = lastDateOfLastMonth - i + 1;
+                calendarBody.appendChild(dayCell);
             }
-        });
-    }
 
-    // Função para carregar os textos existentes no painel de admin
-    const publishedTextsList = document.querySelector('.published-texts-list');
-    function loadPublishedTexts() {
-        if (!publishedTextsList || !db) return;
+            for (let i = 1; i <= lastDateOfMonth; i++) {
+                const dayCell = document.createElement('div');
+                dayCell.classList.add('calendar-day');
+                dayCell.textContent = i;
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const event = events.find(e => e.date === dateStr);
 
-        db.collection("textos").orderBy("createdAt", "desc").get().then(snapshot => {
-            publishedTextsList.innerHTML = ''; // Limpa a lista antes de recarregar
-            snapshot.forEach(doc => {
-                const post = doc.data();
-                const textItem = document.createElement('div');
-                textItem.className = 'text-item';
-                textItem.dataset.id = doc.id; // Salva o ID do documento para a exclusão
-                textItem.innerHTML = `
-                    <span>${post.titulo}</span>
-                    <div class="text-item-actions">
-                        <button class="btn-edit"><i class="fas fa-edit"></i> Editar</button>
-                        <button class="btn-delete"><i class="fas fa-trash"></i> Apagar</button>
-                    </div>
-                `;
-                publishedTextsList.appendChild(textItem);
-            });
-        });
-    }
-
-    // Lógica para apagar textos
-    if (publishedTextsList && db) {
-        loadPublishedTexts(); // Carrega os textos quando a página do admin abre
-
-        publishedTextsList.addEventListener('click', (e) => {
-            const deleteButton = e.target.closest('.btn-delete');
-            if (deleteButton) {
-                const textItem = deleteButton.closest('.text-item');
-                const docId = textItem.dataset.id;
-                
-                if (confirm('Tem certeza que deseja apagar este texto? A ação é permanente.')) {
-                    db.collection('textos').doc(docId).delete()
-                    .then(() => {
-                        alert('Texto apagado com sucesso!');
-                        textItem.remove(); // Remove o item da tela
-                    })
-                    .catch(error => {
-                        console.error('Erro ao apagar texto: ', error);
-                        alert('Ocorreu um erro ao apagar o texto.');
-                    });
+                if (event) {
+                    dayCell.classList.add('event-day');
+                    dayCell.dataset.date = dateStr;
                 }
+                calendarBody.appendChild(dayCell);
+            }
+
+            const totalDays = calendarBody.children.length;
+            const remainingDays = (7 - (totalDays % 7)) % 7;
+            for (let i = 1; i <= remainingDays; i++) {
+                const dayCell = document.createElement('div');
+                dayCell.classList.add('calendar-day', 'empty-day');
+                dayCell.textContent = i;
+                calendarBody.appendChild(dayCell);
+            }
+        }
+
+        function showEventDetails(dateStr) {
+            const event = events.find(e => e.date === dateStr);
+            if (!event || !eventDisplayPanel) return;
+            eventDisplayPanel.innerHTML = `
+                <div class="event-card-dynamic">
+                    <img src="${event.imageSrc}" alt="${event.title}">
+                    <h4>${event.title}</h4>
+                    <p><strong>Horário:</strong> ${event.time}</p>
+                    <p><strong>Local:</strong> ${event.location}</p>
+                    <a href="${event.ticketLink}" class="btn-ingressos" target="_blank">Comprar Ingressos</a>
+                </div>`;
+        }
+
+        function clearEventDetails() {
+            if (!eventDisplayPanel) return;
+            eventDisplayPanel.innerHTML = '<p class="no-event-selected">Clique em uma data com evento para ver os detalhes.</p>';
+        }
+
+        if (prevMonthBtn) {
+            prevMonthBtn.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+                clearEventDetails();
+            });
+        }
+
+        if (nextMonthBtn) {
+            nextMonthBtn.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+                clearEventDetails();
+            });
+        }
+
+        calendarBody.addEventListener('click', (e) => {
+            const previouslyActive = calendarBody.querySelector('.active-day');
+            if (previouslyActive) previouslyActive.classList.remove('active-day');
+            const clickedDay = e.target;
+            if (clickedDay.classList.contains('event-day')) {
+                clickedDay.classList.add('active-day');
+                showEventDetails(clickedDay.dataset.date);
+            } else if (clickedDay.classList.contains('calendar-day') && !clickedDay.classList.contains('empty-day')) {
+                clearEventDetails();
             }
         });
+
+        renderCalendar();
     }
+
+
+    // ===================================================
+    // === CÓDIGO DO PAINEL DE ADMIN
+    // ===================================================
+
+    // Animação de contagem dos números nos cards sociais
+    const counters = document.querySelectorAll('.social-metric');
+    if (counters.length > 0) {
+        const animationDuration = 2000;
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            const updateCount = () => {
+                const current = +counter.innerText;
+                const increment = target / (animationDuration / 50);
+                if (current < target) {
+                    counter.innerText = `${Math.ceil(current + increment)}`;
+                    setTimeout(updateCount, 50);
+                } else {
+                    if (target >= 1000) {
+                        counter.innerText = (target / 1000).toFixed(1) + 'k';
+                    } else {
+                        counter.innerText = target;
+                    }
+                }
+            };
+            updateCount();
+        });
+    }
+
+    // Confirmação antes de apagar um texto no painel de admin
+    const deleteButtons = document.querySelectorAll('.btn-delete');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const wantsToDelete = confirm('Tem certeza de que deseja apagar este item? Esta ação não pode ser desfeita.');
+            if (wantsToDelete) {
+                this.closest('.text-item').remove();
+            }
+        });
+    });
 
     // Validação do formulário de mudança de senha
     const changePasswordForm = document.getElementById('change-password-form');
@@ -194,11 +283,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const confirmPassword = document.getElementById('confirm-password').value;
 
             if (newPassword !== confirmPassword) {
-                alert('A "Nova Senha" e a "Confirmação de Senha" não correspondem.');
+                alert('A "Nova Senha" e a "Confirmação de Senha" não correspondem. Tente novamente.');
             } else if (newPassword.length < 8) {
                 alert('A nova senha deve ter pelo menos 8 caracteres.');
             } else {
-                alert('Senha alterada com sucesso! (Esta é uma simulação de frontend)');
+                alert('Senha alterada com sucesso! (Esta é uma simulação)');
                 this.reset();
             }
         });
