@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+    const db = (typeof firebase !== 'undefined') ? firebase.firestore() : null;
     // ===================================================
     // === CÓDIGOS GERAIS DO SITE (Links, Logo, Formulário)
     // ===================================================
