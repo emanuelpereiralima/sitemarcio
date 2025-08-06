@@ -645,6 +645,324 @@ footer p {
     font-size: 0.9rem;
 }
 
+/* ========================================= */
+/* === ESTILOS PARA A NOVA SEÇÃO TEXTOS === */
+/* ========================================= */
+
+#textos {
+    padding: 60px 20px;
+    background-color: var(--primary-color);
+}
+
+#textos h2 {
+    color: var(--secondary-color);
+}
+
+#textos h2::after {
+    background-color: var(--secondary-color);
+}
+
+.textos-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.post-card {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-content {
+    padding: 25px;
+}
+
+.post-content h3 {
+    color: var(--accent-color);
+    margin-top: 0;
+}
+
+.post-meta {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-bottom: 15px;
+}
+
+.post-excerpt {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.post-readmore {
+    display: inline-block;
+    margin-top: 20px;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* ============================================== */
+/* === ESTILOS DA PÁGINA DE LOGIN (REFINADO) === */
+/* ============================================== */
+
+.login-body-styled {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--primary-color); /* Usando a cor primária do site */
+}
+
+.login-container {
+    padding: 40px;
+    background-color: #fff; /* Fundo branco para o container */
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center; /* Centraliza o conteúdo interno */
+}
+
+.login-form h2 {
+    color: var(--secondary-color); /* Cor secundária para o título */
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 25px;
+    text-align: left; /* Alinha os labels à esquerda */
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.input-group input {
+    width: calc(100% - 22px); /* Ajusta a largura considerando o padding */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box; /* Garante que o padding não aumenta a largura total */
+}
+
+.login-form button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--accent-color); /* Usando a cor de destaque */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-form button:hover {
+    background-color: #d96404;
+}
+
+/* ================================================== */
+/* === ESTILOS DO PAINEL DE ADMIN (REDESENHADO) === */
+/* ================================================== */
+
+/* Layout Geral do Admin */
+.admin-body {
+    background-color: #f4f7f6; /* Fundo mais suave */
+}
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Barra Lateral */
+.admin-sidebar {
+    width: 250px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    padding: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+    background-color: rgba(0,0,0,0.2);
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.sidebar-nav a:hover {
+    background-color: rgba(0,0,0,0.3);
+}
+
+.sidebar-nav li.active a {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.sidebar-nav a i {
+    width: 20px; /* Alinha os ícones */
+    text-align: center;
+}
+
+/* Conteúdo Principal */
+.admin-main-content {
+    flex-grow: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.admin-main-header {
+    margin-bottom: 40px;
+}
+
+.admin-main-header h1 {
+    color: #333;
+    margin: 0;
+}
+
+.admin-main-header p {
+    color: #777;
+    font-size: 1.1rem;
+}
+
+.admin-section {
+    margin-bottom: 40px;
+}
+
+.admin-section h4 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.admin-card {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.admin-card .input-group {
+    margin-bottom: 15px;
+}
+
+.admin-card label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.admin-card input, .admin-card textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.admin-card button.btn-primary {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--secondary-color);
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.admin-card button.btn-primary:hover {
+    background-color: #012a2e;
+}
+
+
+/* Lista de Textos Publicados */
+.published-texts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.text-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    color: #333;
+}
+
+.text-item-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.text-item-actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+}
+
+.btn-edit {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.btn-delete {
+    background-color: #ffcdd2;
+    color: #c62828;
+}
+
 
 /* --- Responsividade --- */
 @media (max-width: 992px) {

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body class="admin-body">
+
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h3>Admin</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-pen-to-square"></i> Conteúdo</a></li>
+                    <li><a href="#configuracoes"><i class="fas fa-cog"></i> Configurações</a></li>
+                    <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Sair do Painel</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="admin-main-content">
+            <header class="admin-main-header">
+                <h1>Dashboard</h1>
+                <p>Bem-vindo(a) ao painel de gerenciamento de conteúdo.</p>
+            </header>
+            
+            <section class="admin-section">
+                <h4>Textos Publicados</h4>
+                <div class="published-texts-list">
+                    <div class="text-item">
+                        <span>Reflexões Sobre o Processo Criativo</span>
+                        <div class="text-item-actions">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Editar</button>
+                            <button class="btn-delete"><i class="fas fa-trash"></i> Apagar</button>
+                        </div>
+                    </div>
+                    <div class="text-item">
+                        <span>A Importância do Teatro na Educação</span>
+                        <div class="text-item-actions">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Editar</button>
+                            <button class="btn-delete"><i class="fas fa-trash"></i> Apagar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="admin-section">
+                <h4>Ações Rápidas</h4>
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h4>Bio (Página Inicial)</h4>
+                        <textarea id="bio-textarea" rows="5" placeholder="Altere aqui o texto da seção 'Salve Salve'..."></textarea>
+                        <button id="save-bio-btn" class="btn-primary">Salvar Bio</button>
+                    </div>
+                    <div class="admin-card">
+                        <h4>Adicionar Filme à Timeline</h4>
+                        <input type="number" id="filme-ano-input" placeholder="Ano (ex: 2025)">
+                        <input type="text" id="filme-nome-input" placeholder="Nome do Filme/Série">
+                        <button id="add-filme-btn" class="btn-primary">Adicionar Filme</button>
+                    </div>
+                    <div class="admin-card">
+                        <h4>Adicionar Evento à Agenda</h4>
+                        <input type="date" id="evento-data-input">
+                        <input type="text" id="evento-titulo-input" placeholder="Título do Evento">
+                        <input type="text" id="evento-local-input" placeholder="Local">
+                        <button id="add-evento-btn" class="btn-primary">Adicionar Evento</button>
+                    </div>
+                    <div class="admin-card">
+                        <h4>Adicionar Novo Texto</h4>
+                        <input type="text" id="texto-titulo-input" placeholder="Título do Texto">
+                        <textarea id="texto-conteudo-textarea" rows="5" placeholder="Conteúdo do texto..."></textarea>
+                        <button id="publish-texto-btn" class="btn-primary">Publicar Texto</button>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="admin-section" id="configuracoes">
+                <h4>Segurança</h4>
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h4>Alterar Senha</h4>
+                        <form id="change-password-form">
+                            <div class="input-group">
+                                <label for="current-password">Senha Atual</label>
+                                <input type="password" id="current-password" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="new-password">Nova Senha</label>
+                                <input type="password" id="new-password" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="confirm-password">Confirmar Nova Senha</label>
+                                <input type="password" id="confirm-password" required>
+                            </div>
+                            <button type="submit" class="btn-primary">Salvar Nova Senha</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
